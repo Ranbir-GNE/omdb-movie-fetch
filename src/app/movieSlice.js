@@ -1,37 +1,69 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchMovies = createAsyncThunk(
-  "movies/fetchMovies",
-  async (searchTerm) => {
-    const API_KEY = "1de027e4";
+const API_KEY = "1de027e4";
+
+const fetchMoviesStart = () => ({
+  type: "movies/fetchMoviesStart",
+});
+
+const fetchMoviesSuccess = (movies) => ({
+  type: "movies/fetchMoviesSuccess",
+  payload: movies,
+});
+
+const fetchMoviesFailure = (error) => ({
+  type: "movies/fetchMoviesFailure",
+  payload: error,
+});
+
+export const fetchMovies = (searchTerm) => async (dispatch) => {
+  dispatch(fetchMoviesStart());
+  try {
     const response = await axios.get(
       `http://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`
     );
     const data = response.data;
     if (data.Response === "True") {
-      return data.Search;
+      dispatch(fetchMoviesSuccess(data.Search));
     } else {
       throw new Error(data.Error);
     }
+  } catch (error) {
+    dispatch(fetchMoviesFailure(error.message));
   }
-);
+};
 
-export const fetchMovieDetail = createAsyncThunk(
-  "movies/fetchMovieDetail",
-  async (movieId) => {
-    const API_KEY = "1de027e4";
+const fetchMovieDetailStart = () => ({
+  type: "movies/fetchMovieDetailStart",
+});
+
+const fetchMovieDetailSuccess = (movie) => ({
+  type: "movies/fetchMovieDetailSuccess",
+  payload: movie,
+});
+
+const fetchMovieDetailFailure = (error) => ({
+  type: "movies/fetchMovieDetailFailure",
+  payload: error,
+});
+
+export const fetchMovieDetail = (movieId) => async (dispatch) => {
+  dispatch(fetchMovieDetailStart());
+  try {
     const response = await axios.get(
       `http://www.omdbapi.com/?i=${movieId}&apikey=${API_KEY}`
     );
     const data = response.data;
     if (data.Response === "True") {
-      return data;
+      dispatch(fetchMovieDetailSuccess(data));
     } else {
       throw new Error(data.Error);
     }
+  } catch (error) {
+    dispatch(fetchMovieDetailFailure(error.message));
   }
-);
+};
 
 const movieSlice = createSlice({
   name: "movies",
@@ -49,29 +81,29 @@ const movieSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMovies.pending, (state) => {
+      .addCase("movies/fetchMoviesStart", (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchMovies.fulfilled, (state, action) => {
+      .addCase("movies/fetchMoviesSuccess", (state, action) => {
         state.loading = false;
         state.moviesList = action.payload;
       })
-      .addCase(fetchMovies.rejected, (state, action) => {
+      .addCase("movies/fetchMoviesFailure", (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       })
-      .addCase(fetchMovieDetail.pending, (state) => {
+      .addCase("movies/fetchMovieDetailStart", (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchMovieDetail.fulfilled, (state, action) => {
+      .addCase("movies/fetchMovieDetailSuccess", (state, action) => {
         state.loading = false;
         state.movieDetails = action.payload;
       })
-      .addCase(fetchMovieDetail.rejected, (state, action) => {
+      .addCase("movies/fetchMovieDetailFailure", (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
   },
 });
