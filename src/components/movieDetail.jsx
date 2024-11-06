@@ -40,6 +40,12 @@ const MovieDetail = ({ movieId, onClose }) => {
     Plot = "No plot available",
     Genre = "Unknown Genre",
     imdbRating = "Not rated",
+    Runtime = "Unknown Runtime",
+    Actors = "Unknown Actors",
+    Language = "Unknown Language",
+    Country = "Unknown Country",
+    Awards = "No awards",
+    BoxOffice = "Unknown Box Office",
   } = movieDetails;
 
   return (
@@ -65,13 +71,31 @@ const MovieDetail = ({ movieId, onClose }) => {
             <strong>Year:</strong> {Year}
           </p>
           <p>
-            <strong>Plot:</strong> {Plot}
+            <strong>Runtime:</strong> {Runtime}
+          </p>
+          <p>
+            <strong>Actors:</strong> {Actors}
+          </p>
+          <p>
+            <strong>Box Office:</strong> {BoxOffice}
+          </p>
+          <p>
+            <strong>Rating:</strong> {imdbRating}
           </p>
           <p>
             <strong>Genre:</strong> {Genre}
           </p>
           <p>
-            <strong>Rating:</strong> {imdbRating}
+            <strong>Language:</strong> {Language}
+          </p>
+          <p>
+            <strong>Country:</strong> {Country}
+          </p>
+          <p>
+            <strong>Awards:</strong> {Awards}
+          </p>
+          <p>
+            <strong>Plot:</strong> {Plot}
           </p>
         </div>
       </div>
