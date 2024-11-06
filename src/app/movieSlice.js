@@ -21,7 +21,7 @@ export const fetchMovies = (searchTerm) => async (dispatch) => {
   dispatch(fetchMoviesStart());
   try {
     const response = await axios.get(
-      `http://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`
+      `https://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`
     );
     const data = response.data;
     if (data.Response === "True") {
@@ -52,7 +52,7 @@ export const fetchMovieDetail = (movieId) => async (dispatch) => {
   dispatch(fetchMovieDetailStart());
   try {
     const response = await axios.get(
-      `http://www.omdbapi.com/?i=${movieId}&apikey=${API_KEY}`
+      `https://www.omdbapi.com/?i=${movieId}&apikey=${API_KEY}`
     );
     const data = response.data;
     if (data.Response === "True") {
