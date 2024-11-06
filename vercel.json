@@ -1,0 +1,57 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "next.config.js",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      },
+      {
+        "src": "/(.*)",
+        "headers": {
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block"
+        }
+      }
+    ],
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; img-src *; media-src media1.com media2.com; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/old-route",
+        "destination": "/new-route"
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/deprecated-route",
+        "destination": "/",
+        "permanent": true
+      }
+    ]
+  }
+  
