@@ -15,7 +15,7 @@ const MovieDetail = ({ movieId, onClose }) => {
     return () => {
       dispatch(clearMovieDetails());
     };
-  }, [dispatch, movieId]);
+  }, [movieId]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p className="text-red-500">{error}</p>;

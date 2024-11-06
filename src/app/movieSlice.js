@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_KEY = "1de027e4";
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 const fetchMoviesStart = () => ({
   type: "movies/fetchMoviesStart",
