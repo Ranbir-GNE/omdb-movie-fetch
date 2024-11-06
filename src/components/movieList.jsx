@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMovies } from "../app/movieSlice"; // Import your fetchMovies action
+import { fetchMovies } from "../app/movieSlice"; 
 import LoadingSpinner from "./LoadingSpinner";
 import MovieDetail from "./movieDetail";
 

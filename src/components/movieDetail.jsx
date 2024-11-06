@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMovieDetail, clearMovieDetails } from "../app/movieSlice";
 import LoadingSpinner from "./LoadingSpinner";
@@ -6,16 +6,24 @@ import LoadingSpinner from "./LoadingSpinner";
 const MovieDetail = ({ movieId, onClose }) => {
   const dispatch = useDispatch();
   const { movieDetails, loading, error } = useSelector((state) => state.movies);
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    if (movieId && (!movieDetails || movieDetails.id !== movieId)) {
+    if (
+      movieId &&
+      !hasFetched &&
+      (!movieDetails || movieDetails.imdbID !== movieId)
+    ) {
       dispatch(fetchMovieDetail(movieId));
+      setHasFetched(true);
     }
+  }, [movieId, hasFetched, dispatch, movieDetails]);
 
-    return () => {
-      dispatch(clearMovieDetails());
-    };
-  }, [movieId]);
+  const handleClose = () => {
+    dispatch(clearMovieDetails());
+    setHasFetched(false);
+    onClose();
+  };
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -38,17 +46,17 @@ const MovieDetail = ({ movieId, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
       <div className="bg-gray-800 text-white rounded-lg shadow-lg p-8 relative w-full max-w-lg">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-2 right-2 text-gray-400 hover:text-white"
         >
           Close
         </button>
-        <>
+        <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">{Title}</h2>
           <img
             src={Poster !== "N/A" ? Poster : "https://via.placeholder.com/150"}
             alt={`${Title} poster`}
-            className="w-full h-64 object-cover rounded-lg mb-4"
+            className="w-full h-64 object-contain rounded-lg mb-4"
           />
           <p>
             <strong>Director:</strong> {Director}
@@ -65,7 +73,7 @@ const MovieDetail = ({ movieId, onClose }) => {
           <p>
             <strong>Rating:</strong> {imdbRating}
           </p>
-        </>
+        </div>
       </div>
     </div>
   );
